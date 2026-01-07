@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Học Gõ Tiếng Việt Telex - Bài thơ Quê Hương</title>
+    <style>
+        :root { --primary: #3498db; --accent: #e67e22; --bg: #ecf0f1; }
+        body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px; }
+        
+        .main-card { background: white; padding: 25px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 95%; max-width: 850px; text-align: center; border: 6px solid #fff; }
+        
+        /* Hiển thị câu thơ */
+        #vietnamese-text { font-size: 32px; color: #2c3e50; margin-bottom: 10px; font-weight: bold; }
+        
+        /* Hiển thị phím Telex cần nhấn */
+        #telex-hint-container { background: #f8f9fa; padding: 15px; border-radius: 15px; border: 2px dashed #bdc3c7; margin-bottom: 25px; }
+        .telex-char { font-size: 28px; display: inline-block; margin: 0 4px; color: #95a5a6; font-family: monospace; font-weight: bold; }
+        .telex-char.done { color: #2ecc71; }
+        .telex-char.active { color: #e67e22; background: #f1c40f; border-radius: 5px; padding: 0 4px; border-bottom: 3px solid #d35400; }
+        .telex-char.space { color: #3498db; }
+
+        /* Bàn tay */
+        .hands-area { display: flex; gap: 60px; justify-content: center; margin-top: 30px; }
+        .hand-svg { width: 220px; height: 180px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1)); }
+        .finger-node { fill: #ecf0f1; stroke: #bdc3c7; stroke-width: 2; transition: all 0.2s ease; }
+        .finger-node.active { fill: var(--accent); stroke: #d35400; transform: translateY(-10px); }
+
+        .footer-info { margin-top: 20px; font-size: 16px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+
+    <div class="main-card">
+        <h2 style="color: var(--primary); margin: 0;">🌻 Bé Học Gõ Tiếng Việt 🌻</h2>
+        <p style="margin-top: 5px;">Bài thơ: <b>Quê hương</b> (Đỗ Trung Quân)</p>
+        
+        <div id="vietnamese-text">Đang tải...</div>
+        
+        <div id="telex-hint-container">
+            <div id="hint-row"></div>
+        </div>
+
+        <div id="progress-bar" style="font-size: 14px; color: #95a5a6;">Câu 1 / 16</div>
+
+        <div class="hands-area">
+            <svg class="hand-svg" viewBox="0 0 200 180">
+                <rect id="f1" class="finger-node" x="10" y="50" width="30" height="70" rx="15" />
+                <rect id="f2" class="finger-node" x="50" y="20" width="30" height="90" rx="15" />
+                <rect id="f3" class="finger-node" x="90" y="10" width="30" height="100" rx="15" />
+                <rect id="f4" class="finger-node" x="130" y="20" width="30" height="90" rx="15" />
+                <rect id="f5" class="finger-node" x="160" y="110" width="40" height="60" rx="20" transform="rotate(-20 180 140)" />
+                <path d="M10,120 Q10,170 180,170 L180,120 Z" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="2" />
+            </svg>
+            <svg class="hand-svg" viewBox="0 0 200 180">
+                <rect id="f6" class="finger-node" x="0" y="110" width="40" height="60" rx="20" transform="rotate(20 20 140)" />
+                <rect id="f7" class="finger-node" x="40" y="20" width="30" height="90" rx="15" />
+                <rect id="f8" class="finger-node" x="80" y="10" width="30" height="100" rx="15" />
+                <rect id="f9" class="finger-node" x="120" y="20" width="30" height="90" rx="15" />
+                <rect id="f10" class="finger-node" x="160" y="50" width="30" height="70" rx="15" />
+                <path d="M20,170 Q190,170 190,120 L20,120 Z" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="2" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="footer-info">Bé hãy nhìn <b>ô màu vàng</b> và gõ theo nhé!</div>
+
+    <script>
+        const poemData = [
+            {v: "Quê hương là chùm khế ngọt", t: "Quee huowng laf chumf khee ngotj "},
+            {v: "Cho con trèo hái mỗi ngày", t: "Cho con treoaf hais mooji ngayf "},
+            {v: "Quê hương là đường đi học", t: "Quee huowng laf duowngf di hocj "},
+            {v: "Con về rợp bướm vàng bay", t: "Con veef ropjp buowms vangf bay "},
+            {v: "Quê hương là con diều biếc", t: "Quee huowng laf con dieeuaf biecj "},
+            {v: "Tuổi thơ con thả trên đồng", t: "Tuooji thoer con thar treen dongf "},
+            {v: "Quê hương là con đò nhỏ", t: "Quee huowng laf con doaf nhoer "},
+            {v: "Êm đềm khua nước ven sông", t: "Eem deemf khua nuowsc ven song "},
+            {v: "Quê hương mỗi người chỉ một", t: "Quee huowng mooji nguowif chir motj "},
+            {v: "Như là chỉ một mẹ thôi", t: "Nhuw laf chir motj mej thooi "}
+        ];
+
+        let lineIdx = 0;
+        let charIdx = 0;
+
+        const fMap = {
+            'a': 'f1', 'q': 'f1', 'z': 'f1',
+            's': 'f2', 'w': 'f2', 'x': 'f2',
+            'd': 'f3', 'e': 'f3', 'c': 'f3',
+            'f': 'f4', 'r': 'f4', 'v': 'f4', 'g': 'f4', 't': 'f4', 'b': 'f4',
+            'h': 'f7', 'y': 'f7', 'n': 'f7', 'm': 'f7', 'u': 'f7', 'j': 'f7',
+            'k': 'f8', 'i': 'f8',
+            'l': 'f9', 'o': 'f9',
+            'p': 'f10', ' ': 'f6'
+        };
+
+        function draw() {
+            const line = poemData[lineIdx];
+            document.getElementById('vietnamese-text').innerText = line.v;
+            document.getElementById('progress-bar').innerText = `Câu ${lineIdx + 1} / ${poemData.length}`;
+            
+            const row = document.getElementById('hint-row');
+            row.innerHTML = '';
+            line.t.split('').forEach((c, i) => {
+                const span = document.createElement('span');
+                span.className = 'telex-char ' + (i < charIdx ? 'done' : (i === charIdx ? 'active' : ''));
+                if(c === ' ') { span.innerHTML = '␣'; span.classList.add('space'); }
+                else span.innerText = c;
+                row.appendChild(span);
+            });
+
+            // Highlight finger
+            document.querySelectorAll('.finger-node').forEach(f => f.classList.remove('active'));
+            const currentKey = line.t[charIdx].toLowerCase();
+            const fingerId = fMap[currentKey];
+            if(fingerId) document.getElementById(fingerId).classList.add('active');
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if(e.code === "Space") e.preventDefault();
+            
+            const expected = poemData[lineIdx].t[charIdx].toLowerCase();
+            const pressed = e.key.toLowerCase();
+
+            if(pressed === expected) {
+                charIdx++;
+                if(charIdx >= poemData[lineIdx].t.length) {
+                    charIdx = 0;
+                    lineIdx++;
+                    if(lineIdx >= poemData.length) {
+                        alert("🎉 Bé thật tuyệt vời! Đã hoàn thành bài thơ!");
+                        lineIdx = 0;
+                    }
+                }
+                draw();
+            }
+        });
+
+        draw();
+    </script>
+</body>
+</html>
