@@ -2,155 +2,155 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Bé Tập Gõ Telex - Bài thơ Quê Hương</title>
+    <title>Bé Tập Gõ 10 Ngón - Tùy Biến</title>
     <style>
-        :root { --primary: #3498db; --accent: #e67e22; --bg: #fdfefe; --card-bg: #ffffff; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #eef2f7; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        :root { --primary: #3498db; --accent: #e67e22; --bg: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        .container { display: flex; gap: 20px; width: 95%; max-width: 1100px; padding: 20px; }
-        
-        /* CỘT TRÁI - LUYỆN TẬP */
-        .left-column { flex: 3; background: var(--card-bg); padding: 30px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-        
-        #vietnamese-text { font-size: 36px; color: #2c3e50; margin-bottom: 10px; font-weight: bold; min-height: 50px; }
-        #telex-hint-container { background: #f1f5f9; padding: 15px; border-radius: 15px; border: 2px dashed #cbd5e0; margin-bottom: 25px; }
-        .telex-char { font-size: 30px; display: inline-block; margin: 0 5px; color: #94a3b8; font-family: 'Courier New', monospace; font-weight: bold; }
-        .telex-char.active { color: #e67e22; background: #fef3c7; border-radius: 8px; padding: 0 6px; border-bottom: 4px solid #f59e0b; }
-        .telex-char.done { color: #10b981; }
+        /* Tab Menu */
+        .tab-menu { margin-top: 20px; display: flex; gap: 10px; }
+        .tab-btn { padding: 10px 25px; cursor: pointer; border: none; border-radius: 15px 15px 0 0; background: #cbd5e0; font-weight: bold; transition: 0.3s; }
+        .tab-btn.active { background: white; color: var(--primary); box-shadow: 0 -5px 10px rgba(0,0,0,0.05); }
 
-        /* Bàn tay SVG */
-        .hands-area { display: flex; gap: 40px; justify-content: center; margin-top: 30px; }
-        .hand-svg { width: 180px; height: 160px; }
-        .finger-node { fill: #e2e8f0; stroke: #94a3b8; stroke-width: 2; transition: 0.15s; }
-        .finger-node.active { fill: var(--accent); stroke: #d35400; transform: translateY(-8px); }
+        .container { background: white; width: 90%; max-width: 900px; padding: 30px; border-radius: 0 0 30px 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .content-tab { display: none; }
+        .content-tab.active { display: block; }
 
-        /* CỘT PHẢI - HƯỚNG DẪN TELEX */
-        .right-column { flex: 1; background: #34495e; color: white; padding: 20px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .guide-title { text-align: center; font-size: 20px; color: #f1c40f; margin-bottom: 15px; border-bottom: 2px solid #5d6d7e; padding-bottom: 10px; }
-        .guide-section { margin-bottom: 20px; }
-        .guide-section h3 { font-size: 16px; margin-bottom: 8px; color: #3498db; }
-        .guide-item { display: flex; justify-content: space-between; background: #2c3e50; padding: 8px 12px; margin-bottom: 5px; border-radius: 8px; font-size: 15px; }
-        .key-code { color: #f1c40f; font-weight: bold; }
+        /* Giao diện luyện tập */
+        #display-word { font-size: 40px; color: #2c3e50; font-weight: bold; margin-bottom: 20px; min-height: 60px; }
+        #telex-hint-area { background: #f8fafc; padding: 20px; border-radius: 15px; border: 2px dashed #cbd5e0; margin-bottom: 30px; min-height: 40px; line-height: 1.8; }
+        .char { font-size: 32px; display: inline-block; margin: 0 4px; color: #94a3b8; font-family: 'Courier New', monospace; font-weight: bold; }
+        .char.active { color: #e67e22; background: #fef3c7; border-radius: 8px; padding: 0 5px; border-bottom: 4px solid #f59e0b; }
+        .char.done { color: #10b981; }
 
-        #progress { font-size: 14px; color: #94a3b8; margin-top: 10px; }
+        /* Bàn tay */
+        .hands-area { display: flex; gap: 50px; justify-content: center; margin-top: 20px; }
+        .hand-svg { width: 200px; height: 180px; }
+        .finger { fill: #e2e8f0; stroke: #94a3b8; stroke-width: 2; transition: 0.15s; }
+        .finger.highlight { fill: var(--accent); stroke: #d35400; transform: translateY(-10px); }
+
+        /* Giao diện cài đặt */
+        textarea { width: 100%; height: 150px; padding: 15px; border-radius: 10px; border: 2px solid #cbd5e0; font-size: 16px; margin-bottom: 15px; resize: none; }
+        .save-btn { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 16px; }
     </style>
 </head>
 <body>
 
+    <div class="tab-menu">
+        <button class="tab-btn active" onclick="showTab('practice-tab')">Luyện Tập</button>
+        <button class="tab-btn" onclick="showTab('settings-tab')">Nhập Nội Dung</button>
+    </div>
+
     <div class="container">
-        <div class="left-column">
-            <h2 style="color: var(--primary); margin: 0 0 20px 0;">🌟 Bé Tập Gõ Quê Hương 🌟</h2>
+        <div id="practice-tab" class="content-tab active">
+            <div id="display-word">Quê hương là chùm khế ngọt</div>
+            <div id="telex-hint-area"></div>
             
-            <div id="vietnamese-text">Đang tải...</div>
-            
-            <div id="telex-hint-container">
-                <div id="hint-row"></div>
-            </div>
-
-            <div id="progress">Dòng 1 / 16</div>
-
             <div class="hands-area">
                 <svg class="hand-svg" viewBox="0 0 200 180">
-                    <rect id="f1" class="finger-node" x="10" y="50" width="30" height="70" rx="15" />
-                    <rect id="f2" class="finger-node" x="50" y="20" width="30" height="90" rx="15" />
-                    <rect id="f3" class="finger-node" x="90" y="10" width="30" height="100" rx="15" />
-                    <rect id="f4" class="finger-node" x="130" y="20" width="30" height="90" rx="15" />
-                    <rect id="f5" class="finger-node" x="160" y="110" width="40" height="60" rx="20" transform="rotate(-20 180 140)" />
+                    <rect id="f1" class="finger" x="10" y="50" width="30" height="70" rx="15" />
+                    <rect id="f2" class="finger" x="50" y="20" width="30" height="90" rx="15" />
+                    <rect id="f3" class="finger" x="90" y="10" width="30" height="100" rx="15" />
+                    <rect id="f4" class="finger" x="130" y="20" width="30" height="90" rx="15" />
+                    <rect id="f5" class="finger" x="160" y="110" width="40" height="60" rx="20" transform="rotate(-20 180 140)" />
                     <path d="M10,120 Q10,170 180,170 L180,120 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
                 </svg>
                 <svg class="hand-svg" viewBox="0 0 200 180">
-                    <rect id="f6" class="finger-node" x="0" y="110" width="40" height="60" rx="20" transform="rotate(20 20 140)" />
-                    <rect id="f7" class="finger-node" x="40" y="20" width="30" height="90" rx="15" />
-                    <rect id="f8" class="finger-node" x="80" y="10" width="30" height="100" rx="15" />
-                    <rect id="f9" class="finger-node" x="120" y="20" width="30" height="90" rx="15" />
-                    <rect id="f10" class="finger-node" x="160" y="50" width="30" height="70" rx="15" />
+                    <rect id="f6" class="finger" x="0" y="110" width="40" height="60" rx="20" transform="rotate(20 20 140)" />
+                    <rect id="f7" class="finger" x="40" y="20" width="30" height="90" rx="15" />
+                    <rect id="f8" class="finger" x="80" y="10" width="30" height="100" rx="15" />
+                    <rect id="f9" class="finger" x="120" y="20" width="30" height="90" rx="15" />
+                    <rect id="f10" class="finger" x="160" y="50" width="30" height="70" rx="15" />
                     <path d="M20,170 Q190,170 190,120 L20,120 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
                 </svg>
             </div>
         </div>
 
-        <div class="right-column">
-            <div class="guide-title">Mẹo Gõ Telex</div>
-            
-            <div class="guide-section">
-                <h3>Các Dấu Thanh</h3>
-                <div class="guide-item"><span>Dấu Sắc</span><span class="key-code">s</span></div>
-                <div class="guide-item"><span>Dấu Huyền</span><span class="key-code">f</span></div>
-                <div class="guide-item"><span>Dấu Hỏi</span><span class="key-code">r</span></div>
-                <div class="guide-item"><span>Dấu Ngã</span><span class="key-code">x</span></div>
-                <div class="guide-item"><span>Dấu Nặng</span><span class="key-code">j</span></div>
-            </div>
-
-            <div class="guide-section">
-                <h3>Các Chữ Cái</h3>
-                <div class="guide-item"><span>Chữ Â</span><span class="key-code">aa</span></div>
-                <div class="guide-item"><span>Chữ Ă</span><span class="key-code">aw</span></div>
-                <div class="guide-item"><span>Chữ Ê</span><span class="key-code">ee</span></div>
-                <div class="guide-item"><span>Chữ Ô</span><span class="key-code">oo</span></div>
-                <div class="guide-item"><span>Chữ Ơ</span><span class="key-code">ow</span></div>
-                <div class="guide-item"><span>Chữ Ư</span><span class="key-code">uw</span></div>
-                <div class="guide-item"><span>Chữ Đ</span><span class="key-code">dd</span></div>
-            </div>
+        <div id="settings-tab" class="content-tab">
+            <h3>Dán nội dung cần gõ vào đây (Tiếng Việt):</h3>
+            <textarea id="user-input" placeholder="Ví dụ: Con mèo trèo cây cau..."></textarea>
+            <br>
+            <button class="save-btn" onclick="saveContent()">Bắt đầu luyện tập</button>
         </div>
     </div>
 
     <script>
-        const poemData = [
-            {v: "Quê hương là chùm khế ngọt", t: "Quee huowng laf chumf khee ngotj "},
-            {v: "Cho con trèo hái mỗi ngày", t: "Cho con treoaf hais mooji ngayf "},
-            {v: "Quê hương là đường đi học", t: "Quee huowng laf duowngf di hocj "},
-            {v: "Con về rợp bướm vàng bay", t: "Con veef ropjp buowms vangf bay "},
-            {v: "Quê hương là con diều biếc", t: "Quee huowng laf con dieeuaf biecj "},
-            {v: "Tuổi thơ con thả trên đồng", t: "Tuooji thoer con thar treen dongf "},
-            {v: "Quê hương là con đò nhỏ", t: "Quee huowng laf con doaf nhoer "},
-            {v: "Êm đềm khua nước ven sông", t: "Eem deemf khua nuowsc ven song "},
-            {v: "Quê hương là cầu tre nhỏ", t: "Quee huowng laf cauaf tre nhoer "},
-            {v: "Mẹ về nón lá nghiêng che", t: "Mej veef nosn las nghieeng che "},
-            {v: "Quê hương mỗi người chỉ một", t: "Quee huowng mooji nguowif chir motj "},
-            {v: "Như là chỉ một mẹ thôi", t: "Nhuw laf chir motj mej thooi "}
-        ];
+        // Hàm chuyển đổi tiếng Việt sang mã gõ Telex
+        function toTelex(text) {
+            const map = {
+                'á':'as','à':'af','ả':'ar','ã':'ax','ạ':'aj','â':'aa','ấ':'aas','ầ':'aaf','ẩ':'aar','ẫ':'aax','ậ':'aaj','ă':'aw','ắ':'aws','ằ':'awf','ẳ':'awr','ẵ':'awx','ặ':'awj',
+                'é':'es','è':'ef','ẻ':'er','ẽ':'ex','ẹ':'ej','ê':'ee','ế':'ees','ề':'eef','ể':'eer','ễ':'eex','ệ':'eej',
+                'í':'is','ì':'if','ỉ':'ir','ĩ':'ix','ị':'ij',
+                'ó':'os','ò':'of','ỏ':'or','õ':'ox','ọ':'oj','ô':'oo','ố':'oos','ồ':'oof','ổ':'oor','ỗ':'oox','ộ':'ooj','ơ':'ow','ớ':'ows','ờ':'owf','ở':'owr','ỡ':'owx','ợ':'owj',
+                'ú':'us','ì':'uf','ủ':'ur','ũ':'ux','ụ':'uj','ư':'uw','ứ':'uws','ừ':'uwf','ử':'uwr','ữ':'uwx','ự':'uwj',
+                'ý':'ys','ỳ':'yf','ỷ':'yr','ỹ':'yx','ỵ':'yj','đ':'dd'
+            };
+            let res = "";
+            for (let char of text.toLowerCase()) {
+                res += map[char] || char;
+            }
+            return res + " ";
+        }
 
-        let lineIdx = 0, charIdx = 0;
+        let fullText = "Quê hương là chùm khế ngọt";
+        let telexScript = toTelex(fullText);
+        let charIdx = 0;
+
         const fMap = {
-            'a': 'f1', 'q': 'f1', 'z': 'f1', 's': 'f2', 'w': 'f2', 'x': 'f2',
-            'd': 'f3', 'e': 'f3', 'c': 'f3', 'f': 'f4', 'r': 'f4', 'v': 'f4',
-            'g': 'f4', 't': 'f4', 'b': 'f4', 'h': 'f7', 'y': 'f7', 'n': 'f7',
-            'm': 'f7', 'u': 'f7', 'j': 'f7', 'k': 'f8', 'i': 'f8', 'l': 'f9',
-            'o': 'f9', 'p': 'f10', ' ': 'f6'
+            'a':'f1','q':'f1','z':'f1','s':'f2','w':'f2','x':'f2','d':'f3','e':'f3','c':'f3',
+            'f':'f4','r':'f4','v':'f4','g':'f4','t':'f4','b':'f4','h':'f7','y':'f7','n':'f7',
+            'm':'f7','u':'f7','j':'f7','k':'f8','i':'f8','l':'f9','o':'f9','p':'f10',' ':'f6'
         };
 
-        function draw() {
-            const line = poemData[lineIdx];
-            document.getElementById('vietnamese-text').innerText = line.v;
-            document.getElementById('progress').innerText = `Dòng ${lineIdx + 1} / ${poemData.length}`;
-            
-            const row = document.getElementById('hint-row');
-            row.innerHTML = '';
-            line.t.split('').forEach((c, i) => {
-                const span = document.createElement('span');
-                span.className = 'telex-char ' + (i < charIdx ? 'done' : (i === charIdx ? 'active' : ''));
-                span.innerHTML = (c === ' ') ? '␣' : c;
-                row.appendChild(span);
-            });
+        function showTab(id) {
+            document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
-            document.querySelectorAll('.finger-node').forEach(f => f.classList.remove('active'));
-            const fingerId = fMap[line.t[charIdx].toLowerCase()];
-            if(fingerId) document.getElementById(fingerId).classList.add('active');
+        function saveContent() {
+            const input = document.getElementById('user-input').value.trim();
+            if (input) {
+                fullText = input;
+                telexScript = toTelex(fullText);
+                charIdx = 0;
+                document.getElementById('display-word').innerText = fullText;
+                showTab('practice-tab');
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            const hintArea = document.getElementById('telex-hint-area');
+            hintArea.innerHTML = telexScript.split('').map((c, i) => {
+                let cls = i < charIdx ? "done" : (i === charIdx ? "active" : "");
+                return `<span class="char ${cls}">${c === ' ' ? '␣' : c}</span>`;
+            }).join('');
+
+            document.querySelectorAll('.finger').forEach(f => f.classList.remove('highlight'));
+            const fingerId = fMap[telexScript[charIdx].toLowerCase()];
+            if (fingerId) document.getElementById(fingerId).classList.add('highlight');
         }
 
         window.addEventListener('keydown', (e) => {
-            if(e.code === "Space") e.preventDefault();
-            const expected = poemData[lineIdx].t[charIdx].toLowerCase();
-            if(e.key.toLowerCase() === expected) {
+            if (document.activeElement.tagName === 'TEXTAREA') return;
+            if (e.code === "Space") e.preventDefault();
+            
+            const expected = telexScript[charIdx].toLowerCase();
+            if (e.key.toLowerCase() === expected) {
                 charIdx++;
-                if(charIdx >= poemData[lineIdx].t.length) {
-                    charIdx = 0; lineIdx++;
-                    if(lineIdx >= poemData.length) { alert("Bé đã hoàn thành bài thơ rất giỏi!"); lineIdx = 0; }
+                if (charIdx >= telexScript.length) {
+                    alert("Hoàn thành rồi!");
+                    charIdx = 0;
                 }
-                draw();
+                updateUI();
             }
         });
-        draw();
+
+        // Khởi tạo lần đầu
+        document.getElementById('display-word').innerText = fullText;
+        updateUI();
     </script>
 </body>
 </html>
