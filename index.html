@@ -2,179 +2,176 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Bé Tập Gõ 10 Ngón - Bản Sửa Lỗi</title>
+    <title>Bé Tập Gõ 10 Ngón - Bản Pro 2026</title>
     <style>
-        :root { --primary: #3498db; --accent: #ff5722; --bg: #f8f9fa; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        :root { --primary: #3498db; --accent: #ff5722; --bg: #f1f5f9; }
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
         
-        /* Menu Tab */
-        .tab-menu { background: #fff; padding: 10px; display: flex; justify-content: center; gap: 10px; border-bottom: 2px solid #ddd; }
-        .tab-btn { padding: 10px 20px; cursor: pointer; border: 1px solid #ccc; border-radius: 10px; background: #eee; font-weight: bold; }
+        /* Cấu trúc Fixed */
+        .app-wrapper { display: flex; flex-direction: column; height: 100vh; }
+        
+        .header-nav { background: #fff; padding: 10px; display: flex; justify-content: center; gap: 15px; border-bottom: 2px solid #e2e8f0; z-index: 100; }
+        .tab-btn { padding: 8px 20px; cursor: pointer; border: 2px solid #cbd5e0; border-radius: 12px; background: #fff; font-weight: bold; transition: 0.2s; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Khu vực chính */
-        .container { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; box-sizing: border-box; }
-        .content-tab { display: none; width: 100%; max-width: 800px; height: 100%; flex-direction: column; align-items: center; }
-        .content-tab.active { display: flex; }
+        /* VÙNG CỐ ĐỊNH PHÍA TRÊN */
+        .fixed-panel { background: white; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: center; min-height: 280px; }
+        
+        #telex-hint-bar { height: 60px; font-size: 40px; font-family: 'Courier New', monospace; font-weight: bold; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+        .t-char { color: #d1d5db; padding: 0 5px; }
+        .t-active { color: var(--accent); background: #fff3e0; border-bottom: 4px solid var(--accent); border-radius: 4px; }
 
-        /* PHẦN CỐ ĐỊNH */
-        .fixed-guide { background: white; padding: 15px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; margin-bottom: 20px; text-align: center; }
-        #telex-hint-area { font-size: 36px; min-height: 50px; margin-bottom: 10px; font-family: 'Courier New', monospace; font-weight: bold; height: 50px; overflow: hidden; }
-        .char { color: #cbd5e0; margin: 0 4px; }
-        .char.active { color: var(--accent); background: #fff3e0; padding: 0 5px; border-bottom: 5px solid var(--accent); }
-
-        /* Bàn tay SVG */
-        .hands-area { display: flex; gap: 40px; justify-content: center; }
-        .hand-svg { width: 160px; height: 140px; }
+        .hands-display { display: flex; gap: 60px; justify-content: center; }
+        .hand-svg { width: 180px; height: 150px; }
         .finger { fill: #e2e8f0; stroke: #94a3b8; stroke-width: 2; transition: 0.1s; }
         .finger.highlight { fill: var(--accent); stroke: #bf360c; transform: translateY(-10px); }
 
-        /* PHẦN HIỂN THỊ VĂN BẢN (Cuộn) */
-        .text-scroll-area { flex: 1; background: white; width: 100%; border-radius: 15px; padding: 20px; overflow-y: auto; border: 2px solid #e2e8f0; text-align: left; font-size: 24px; line-height: 1.6; white-space: pre-wrap; }
-        .text-done { color: #10b981; }
-        .text-current { background: #fef3c7; border-radius: 4px; }
+        /* VÙNG CUỘN PHÍA DƯỚI */
+        .scroll-panel { flex: 1; overflow-y: auto; padding: 30px; display: flex; justify-content: center; background: var(--bg); }
+        .text-container { max-width: 800px; width: 100%; background: white; padding: 40px; border-radius: 20px; font-size: 28px; line-height: 1.8; white-space: pre-wrap; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .txt-done { color: #10b981; opacity: 0.6; }
+        .txt-active { background: #fef3c7; border-bottom: 3px solid #f59e0b; font-weight: bold; }
 
         /* Cài đặt */
-        textarea { width: 100%; height: 200px; border-radius: 10px; padding: 15px; font-size: 16px; margin-bottom: 15px; border: 2px solid #cbd5e0; }
-        .save-btn { background: #2ecc71; color: white; border: none; padding: 15px 40px; border-radius: 10px; cursor: pointer; font-size: 18px; font-weight: bold; }
+        .settings-box { width: 100%; max-width: 600px; text-align: center; }
+        textarea { width: 100%; height: 200px; padding: 15px; border-radius: 12px; border: 2px solid #cbd5e0; font-size: 18px; margin-bottom: 20px; }
+        .btn-start { background: #2ecc71; color: white; border: none; padding: 15px 45px; border-radius: 12px; cursor: pointer; font-size: 20px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="tab-menu">
-        <button class="tab-btn active" onclick="showTab('practice-tab')">Luyện Tập</button>
-        <button class="tab-btn" onclick="showTab('settings-tab')">Nhập Nội Dung</button>
+<div class="app-wrapper">
+    <div class="header-nav">
+        <button class="tab-btn active" id="btn-practice" onclick="showTab('practice')">Luyện Tập</button>
+        <button class="tab-btn" id="btn-settings" onclick="showTab('settings')">Nhập Nội Dung</button>
     </div>
 
-    <div class="container">
-        <div id="practice-tab" class="content-tab active">
-            <div class="fixed-guide">
-                <div id="telex-hint-area"></div>
-                <div class="hands-area">
-                    <svg class="hand-svg" viewBox="0 0 200 180">
-                        <rect id="f1" class="finger" x="10" y="50" width="30" height="70" rx="15" />
-                        <rect id="f2" class="finger" x="50" y="20" width="30" height="90" rx="15" />
-                        <rect id="f3" class="finger" x="90" y="10" width="30" height="100" rx="15" />
-                        <rect id="f4" class="finger" x="130" y="20" width="30" height="90" rx="15" />
-                        <rect id="f5" class="finger" x="160" y="110" width="40" height="60" rx="20" transform="rotate(-20 180 140)" />
-                        <path d="M10,120 Q10,170 180,170 L180,120 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
-                    </svg>
-                    <svg class="hand-svg" viewBox="0 0 200 180">
-                        <rect id="f6" class="finger" x="0" y="110" width="40" height="60" rx="20" transform="rotate(20 20 140)" />
-                        <rect id="f7" class="finger" x="40" y="20" width="30" height="90" rx="15" />
-                        <rect id="f8" class="finger" x="80" y="10" width="30" height="100" rx="15" />
-                        <rect id="f9" class="finger" x="120" y="20" width="30" height="90" rx="15" />
-                        <rect id="f10" class="finger" x="160" y="50" width="30" height="70" rx="15" />
-                        <path d="M20,170 Q190,170 190,120 L20,120 Z" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2" />
-                    </svg>
-                </div>
+    <div id="tab-practice" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+        <div class="fixed-panel">
+            <div id="telex-hint-bar"></div>
+            <div class="hands-display">
+                <svg class="hand-svg" viewBox="0 0 200 180">
+                    <rect id="f1" class="finger" x="10" y="50" width="30" height="70" rx="15" />
+                    <rect id="f2" class="finger" x="50" y="20" width="30" height="90" rx="15" />
+                    <rect id="f3" class="finger" x="90" y="10" width="30" height="100" rx="15" />
+                    <rect id="f4" class="finger" x="130" y="20" width="30" height="90" rx="15" />
+                    <rect id="f5" class="finger" x="160" y="110" width="40" height="60" rx="20" transform="rotate(-20 180 140)" />
+                    <path d="M10,120 Q10,170 180,170 L180,120 Z" fill="#e2e8f0" stroke="#94a3b8" />
+                </svg>
+                <svg class="hand-svg" viewBox="0 0 200 180">
+                    <rect id="f6" class="finger" x="0" y="110" width="40" height="60" rx="20" transform="rotate(20 20 140)" />
+                    <rect id="f7" class="finger" x="40" y="20" width="30" height="90" rx="15" />
+                    <rect id="f8" class="finger" x="80" y="10" width="30" height="100" rx="15" />
+                    <rect id="f9" class="finger" x="120" y="20" width="30" height="90" rx="15" />
+                    <rect id="f10" class="finger" x="160" y="50" width="30" height="70" rx="15" />
+                    <path d="M20,170 Q190,170 190,120 L20,120 Z" fill="#e2e8f0" stroke="#94a3b8" />
+                </svg>
             </div>
-            <div class="text-scroll-area" id="text-display"></div>
         </div>
-
-        <div id="settings-tab" class="content-tab">
-            <h2>Dán văn bản có cách dòng vào đây:</h2>
-            <textarea id="user-input">Quê hương là chùm khế ngọt
-Cho con trèo hái mỗi ngày</textarea>
-            <button class="save-btn" onclick="saveContent()">Lưu và Bắt Đầu</button>
+        <div class="scroll-panel">
+            <div class="text-container" id="main-text-area"></div>
         </div>
     </div>
 
-    <script>
-        const mapTelex = {
-            'á':'as','à':'af','ả':'ar','ã':'ax','ạ':'aj','â':'aa','ấ':'aas','ầ':'aaf','ẩ':'aar','ẫ':'aax','ậ':'aaj','ă':'aw','ắ':'aws','ằ':'awf','ẳ':'awr','ẵ':'awx','ặ':'awj',
-            'é':'es','è':'ef','ẻ':'er','ẽ':'ex','ẹ':'ej','ê':'ee','ế':'ees','ề':'eef','ể':'eer','ễ':'eex','ệ':'eej','í':'is','ì':'if','ỉ':'ir','ĩ':'ix','ị':'ij',
-            'ó':'os','ò':'of','ỏ':'or','õ':'ox','ọ':'oj','ô':'oo','ố':'oos','ồ':'oof','ổ':'oor','ỗ':'oox','ộ':'ooj','ơ':'ow','ớ':'ows','ờ':'owf','ở':'owr','ỡ':'owx','ợ':'owj',
-            'ú':'us','ì':'uf','ủ':'ur','ũ':'ux','ụ':'uj','ư':'uw','ứ':'uws','ừ':'uwf','ử':'uwr','ữ':'uwx','ự':'uwj','ý':'ys','ỳ':'yf','ỷ':'yr','ỹ':'yx','ỵ':'yj','đ':'dd'
-        };
+    <div id="tab-settings" style="display: none; flex: 1; justify-content: center; align-items: center; background: var(--bg);">
+        <div class="settings-box">
+            <h2>Dán bài thơ hoặc văn bản vào đây:</h2>
+            <textarea id="input-content" placeholder="Ví dụ: Quê hương là chùm khế ngọt...">Quê hương là chùm khế ngọt
+Cho con trèo hái mỗi ngày</textarea>
+            <br>
+            <button class="btn-start" onclick="initLesson()">Bắt Đầu Ngay</button>
+        </div>
+    </div>
+</div>
 
-        const fMap = {'a':'f1','q':'f1','z':'f1','s':'f2','w':'f2','x':'f2','d':'f3','e':'f3','c':'f3','f':'f4','r':'f4','v':'f4','g':'f4','t':'f4','b':'f4','h':'f7','y':'f7','n':'f7','m':'f7','u':'f7','j':'f7','k':'f8','i':'f8','l':'f9','o':'f9','p':'f10',' ':'f6'};
+<script>
+    const TX_MAP = {'á':'as','à':'af','ả':'ar','ã':'ax','ạ':'aj','â':'aa','ấ':'aas','ầ':'aaf','ẩ':'aar','ẫ':'aax','ậ':'aaj','ă':'aw','ắ':'aws','ằ':'awf','ẳ':'awr','ẵ':'awx','ặ':'awj','é':'es','è':'ef','ẻ':'er','ẽ':'ex','ẹ':'ej','ê':'ee','ế':'ees','ề':'eef','ể':'eer','ễ':'eex','ệ':'eej','í':'is','ì':'if','ỉ':'ir','ĩ':'ix','ị':'ij','ó':'os','ò':'of','ỏ':'or','õ':'ox','ọ':'oj','ô':'oo','ố':'oos','ồ':'oof','ổ':'oor','ỗ':'oox','ộ':'ooj','ơ':'ow','ớ':'ows','ờ':'owf','ở':'owr','ỡ':'owx','ợ':'owj','ú':'us','ù':'uf','ủ':'ur','ũ':'ux','ụ':'uj','ư':'uw','ứ':'uws','ừ':'uwf','ử':'uwr','ữ':'uwx','ự':'uwj','ý':'ys','ỳ':'yf','ỷ':'yr','ỹ':'yx','ỵ':'yj','đ':'dd','\n':' '};
+    const F_MAP = {'a':'f1','q':'f1','z':'f1','s':'f2','w':'f2','x':'f2','d':'f3','e':'f3','c':'f3','f':'f4','r':'f4','v':'f4','g':'f4','t':'f4','b':'f4','h':'f7','y':'f7','n':'f7','m':'f7','u':'f7','j':'f7','k':'f8','i':'f8','l':'f9','o':'f9','p':'f10',' ':'f6'};
 
-        let fullText = "";
-        let telexArr = [];
-        let currentPos = 0;
+    let originalText = "";
+    let telexQueue = []; // Mảng chứa các phím cần gõ
+    let cursor = 0; // Vị trí hiện tại trong telexQueue
 
-        function processInput(text) {
-            // Thay thế tất cả các kiểu xuống dòng bằng phím cách để không bị lỗi gõ
-            fullText = text.replace(/(\r\n|\n|\r)/gm, " ");
-            telexArr = [];
-            for (let char of fullText.toLowerCase()) {
-                let t = mapTelex[char] || char;
-                for (let c of t) {
-                    if (fMap[c]) telexArr.push({ key: c, origin: char });
-                }
+    function initLesson() {
+        const raw = document.getElementById('input-content').value || "Bé tập gõ";
+        originalText = raw;
+        telexQueue = [];
+        
+        // Chuyển đổi văn bản sang hàng đợi phím bấm sạch
+        for (let char of originalText) {
+            let lowerChar = char.toLowerCase();
+            let keys = TX_MAP[lowerChar] || lowerChar;
+            for (let k of keys) {
+                if (F_MAP[k]) telexQueue.push({ key: k, srcChar: char, isEnd: false });
             }
-            // Thêm phím cách cuối bài
-            telexArr.push({key: ' ', origin: ' '});
+            // Đánh dấu ký tự cuối cùng của cụm Telex cho chữ này
+            if (telexQueue.length > 0) telexQueue[telexQueue.length - 1].isEnd = true;
         }
+        
+        cursor = 0;
+        showTab('practice');
+        render();
+    }
 
-        function showTab(id) {
-            document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(event) event.currentTarget.classList.add('active');
-        }
+    function render() {
+        // 1. Hiển thị Telex Hint (Cố định ở trên)
+        const hintBar = document.getElementById('telex-hint-bar');
+        let viewStart = Math.max(0, cursor - 2);
+        hintBar.innerHTML = telexQueue.slice(viewStart, viewStart + 10).map((item, idx) => {
+            let isCurrent = (viewStart + idx === cursor);
+            return `<span class="t-char ${isCurrent ? 't-active' : ''}">${item.key === ' ' ? '␣' : item.key}</span>`;
+        }).join('');
 
-        function saveContent() {
-            const input = document.getElementById('user-input').value;
-            if (input.trim()) {
-                processInput(input);
-                currentPos = 0;
-                showTab('practice-tab');
-                updateUI();
-            }
-        }
-
-        function updateUI() {
-            const hintArea = document.getElementById('telex-hint-area');
-            let start = Math.max(0, currentPos - 2);
-            let end = Math.min(telexArr.length, currentPos + 8);
-            hintArea.innerHTML = telexArr.slice(start, end).map((item, i) => {
-                let realIdx = start + i;
-                let cls = realIdx === currentPos ? "char active" : "char";
-                return `<span class="${cls}">${item.key === ' ' ? '␣' : item.key}</span>`;
-            }).join('');
-
-            const textDisplay = document.getElementById('text-display');
-            let processedCharCount = 0;
-            textDisplay.innerHTML = fullText.split('').map((char, i) => {
-                let telexOfChar = mapTelex[char.toLowerCase()] || char.toLowerCase();
-                // Loại bỏ ký tự không hỗ trợ trong telexOfChar để đếm đúng
-                telexOfChar = telexOfChar.split('').filter(c => fMap[c]).join('');
-                
-                let statusClass = "";
-                if (currentPos > processedCharCount + telexOfChar.length - 1) statusClass = "text-done";
-                else if (currentPos >= processedCharCount) statusClass = "text-current";
-                
-                processedCharCount += telexOfChar.length;
-                return `<span class="${statusClass}">${char}</span>`;
-            }).join('');
-
-            const currentEl = textDisplay.querySelector('.text-current');
-            if (currentEl) currentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            document.querySelectorAll('.finger').forEach(f => f.classList.remove('highlight'));
-            const currentKey = telexArr[currentPos].key;
-            if (fMap[currentKey]) document.getElementById(fMap[currentKey]).classList.add('highlight');
-        }
-
-        window.addEventListener('keydown', (e) => {
-            if (document.activeElement.tagName === 'TEXTAREA') return;
-            if (e.code === "Space") e.preventDefault();
+        // 2. Hiển thị Văn bản gốc (Cuộn ở dưới)
+        const textDisplay = document.getElementById('main-text-area');
+        let qIdx = 0;
+        textDisplay.innerHTML = originalText.split('').map((char) => {
+            let lower = char.toLowerCase();
+            let keys = TX_MAP[lower] || lower;
+            let keysClean = [...keys].filter(k => F_MAP[k]);
             
-            if (e.key.toLowerCase() === telexArr[currentPos].key) {
-                currentPos++;
-                if (currentPos >= telexArr.length) {
-                    alert("Xuất sắc! Bé đã gõ xong rồi.");
-                    currentPos = 0;
-                }
-                updateUI();
-            }
-        });
+            let status = "";
+            if (cursor > qIdx + keysClean.length - 1) status = "txt-done";
+            else if (cursor >= qIdx) status = "txt-active";
+            
+            qIdx += keysClean.length;
+            return `<span class="${status}">${char}</span>`;
+        }).join('');
 
-        // Khởi tạo
-        processInput(document.getElementById('user-input').value);
-        updateUI();
-    </script>
+        // Cuộn tự động
+        const activeNode = textDisplay.querySelector('.txt-active');
+        if (activeNode) activeNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // 3. Highlight Ngón tay
+        document.querySelectorAll('.finger').forEach(f => f.classList.remove('highlight'));
+        const currentKey = telexQueue[cursor]?.key;
+        if (F_MAP[currentKey]) document.getElementById(F_MAP[currentKey]).classList.add('highlight');
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if (document.activeElement.tagName === 'TEXTAREA') return;
+        if (e.code === "Space") e.preventDefault();
+        
+        const pressed = e.key.toLowerCase();
+        if (cursor < telexQueue.length && pressed === telexQueue[cursor].key) {
+            cursor++;
+            if (cursor === telexQueue.length) {
+                alert("Hoàn thành bài gõ rồi! Bé giỏi quá.");
+                cursor = 0;
+            }
+            render();
+        }
+    });
+
+    function showTab(tab) {
+        document.getElementById('tab-practice').style.display = (tab === 'practice' ? 'flex' : 'none');
+        document.getElementById('tab-settings').style.display = (tab === 'settings' ? 'flex' : 'none');
+        document.getElementById('btn-practice').classList.toggle('active', tab === 'practice');
+        document.getElementById('btn-settings').classList.toggle('active', tab === 'settings');
+    }
+
+    // Khởi tạo bài đầu tiên
+    initLesson();
+</script>
 </body>
 </html>
